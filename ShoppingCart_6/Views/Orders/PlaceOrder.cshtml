@@ -1,0 +1,70 @@
+﻿@model List<ShoppingCart_6.Models.Product>
+
+@{
+    ViewData["Title"] = "Place Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Place Your Order</h1>
+
+@if (Model.Any())
+{
+    <h2>Cart Items:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td><img src="@Url.Content("~/images/" + item.ImageUrl)" alt="Product Image" width="100"></td>
+                    <td>
+                        <button class="btn btn-danger removeFromCart" data-product-id="@item.Id">Remove from cart</button>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <p>
+        <a href="@Url.Action("Create", "Orders")" class="btn btn-primary">Place Order</a> | 
+        <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Back to List</a>
+    </p>
+}
+else
+{
+    <p>Your cart is empty.</p>
+    <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Add Items To Bag</a>
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(".removeFromCart").click(function () {
+                debugger
+                var productId = $(this).data("product-id");
+                console.log(productId)
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RemoveFromCart", "Products")', 
+                    data: { productId: productId },
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Error removing product from cart.");
+                    }
+                });
+            });
+        });
+    </script>
+}

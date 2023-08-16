@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ShoppingCart_6.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List Of Orders</h1>
+
+@if (!string.IsNullOrEmpty(ViewBag.OrderPlacedMessage))
+{
+    <div class="alert alert-success">
+        @ViewBag.OrderPlacedMessage
+    </div>
+}
+else if (User.IsInRole("Customer") && !Model.Any())
+{
+    <div class="alert alert-info">
+        You don't have any orders placed yet.
+    </div>
+}
+else
+{
+    <a class="btn btn-primary" asp-controller="Products" asp-action="Create">Add New Product</a>
+    <a class="btn btn-primary" asp-controller="Products" asp-action="Index">View All Products</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShippingAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaymentMethodType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShippingAddress)
+                    </td>
+                    <td>
+                        @if (item.PaymentMethodType == 0)
+                        {
+                            <p>Online</p>
+                        }
+                        else
+                        {
+                            <p>Offline</p>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

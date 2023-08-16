@@ -1,0 +1,35 @@
+﻿@model ShoppingCart_6.Models.Register // Adjust the namespace
+
+<form method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username"  name="username" required>
+    </div>
+    <br />
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <br />
+    <div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+</form>
+<div>
+    Don't have an account? <a href="@Url.Action("Register", "Account")">Register here</a>.
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var modelState in ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                @error.ErrorMessage
+
+                <br>
+            }
+        }
+    </div>
+}
